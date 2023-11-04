@@ -25,6 +25,7 @@ About the External DNS, I have the PDNS already configured, so when I have some 
   - [Testing the configuration](#testing-the-configuration)
   - [For those lazy (I love copy and paste too)](#for-those-lazy-i-love-copy-and-paste-too)
   - [References:](#references)
+  - [TODO](#todo)
 
 ## Cluster Configuration (VMs)
 
@@ -378,3 +379,7 @@ https://docs.ceph.com/en/reef/cephadm/install/
 https://docs.ceph.com/en/reef/cephadm/host-management/#cephadm-adding-hosts
 https://docs.ceph.com/en/reef/cephadm/services/osd/#cephadm-deploy-osds
 https://docs.ceph.com/en/reef/rbd/rbd-kubernetes/
+
+## TODO
+
+- [ ] Make all the Kubernetes part of this via Helm Charts for the sake of our menthal health.
