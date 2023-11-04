@@ -40,7 +40,7 @@ DISKS:
 curl https://download.ceph.com/keys/release.gpg -o /etc/apt/keyrings/ceph.gpg
 apt-add-repository "deb https://download.ceph.com/debian-reef/ $(lsb_release -sc) main"
 ```
-Edit the file and add the `signed-by=/etc/apt/keyrings/ceph.gpg`:
+Edit the file `/etc/apt/sources.list.d/ceph.list` and add the `signed-by=/etc/apt/keyrings/ceph.gpg`:
 ```bash
 deb [signed-by=/etc/apt/keyrings/ceph.gpg] https://download.ceph.com/debian-reef/ jammy main
 ```
