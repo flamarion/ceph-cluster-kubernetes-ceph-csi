@@ -1,6 +1,16 @@
-# Insall Ceph on Ubuntu 22.04 and Ceph CSI on Kubernetes
+# Ceph Cluster and Ceph CSI on Kubernetes
 
-- [Insall Ceph on Ubuntu 22.04 and Ceph CSI on Kubernetes](#insall-ceph-on-ubuntu-2204-and-ceph-csi-on-kubernetes)
+I have a home lab running in some Intel NUC where I have a Kubernetes cluster that does almost everything I need (I still need an external DNS... this is in progress), and I needed something to provide dynamic volume provisioning.
+
+So far, I have created a generic storage class and used a no-provisioner to map persistent volumes to empty directories. Still, it only works well in the short run because the volumes are not replicated and not dynamically provisioned and some other problems of empty dir as a PV.
+
+On top of that, I worked with Ceph a few years ago and wanted to remember some stuff, so I merged my need with my will to return to Ceph.
+
+Now, I have a Ceph Cluster + Kubernetes cluster, and I can provision persistent volumes dynamically.
+
+About the External DNS, I have the PDNS already configured, so when I have some time, I will give it a try: https://github.com/kubernetes-sigs/external-dns/blob/master/docs/tutorials/pdns.md.
+
+- [Ceph Cluster and Ceph CSI on Kubernetes](#ceph-cluster-and-ceph-csi-on-kubernetes)
   - [Cluster Configuration (VMs)](#cluster-configuration-vms)
   - [Repository setup (Al nodes)](#repository-setup-al-nodes)
   - [Node 1 (ceph1):](#node-1-ceph1)
@@ -15,7 +25,6 @@
   - [Testing the configuration](#testing-the-configuration)
   - [For those lazy (I love copy and paste too)](#for-those-lazy-i-love-copy-and-paste-too)
   - [References:](#references)
-
 
 ## Cluster Configuration (VMs)
 
@@ -249,12 +258,12 @@ EOF
 kubectl apply -f csi-rbd-sc.yaml
 ```
 
-Once this first part is done, you're able to use the new storage class provisioning persistent volumes directly from Ceph.
-I should have said it before, but you may want to create a new namespace for this configuration, so you can delete it later and don't mess with your current environment.
+Once this first part is done, you can use the new storage class to provision persistent volumes directly from Ceph.
+You may want to create a new namespace for this configuration so you can delete it later and don't mess with your current environment.
 
 ## Testing the configuration 
 
-Some tests to validate the whole configuration (I'm assume you're familiar with Kubernetes and you know how to check if the PVC is bound or not). Help yourself after each PVC created.
+Some tests validate the whole configuration (I assume you're familiar with Kubernetes, and you know how to check if the PVC is bound or not). Help yourself after each PVC is created.
 
 Create a PVC to be used as raw block device (`volumeMode: Block`):
 ```bash
