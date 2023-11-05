@@ -24,6 +24,7 @@ About the External DNS, I have the PDNS already configured, so when I have some 
     - [Create the StorageClass](#create-the-storageclass)
   - [Testing the configuration](#testing-the-configuration)
   - [For those lazy (I love copy and paste too)](#for-those-lazy-i-love-copy-and-paste-too)
+  - [Helm Charts](#helm-charts)
   - [References:](#references)
   - [TODO](#todo)
 
@@ -373,13 +374,61 @@ kubectl apply -f pvc.yaml
 kubectl apply -f pod.yaml
 ```
 
+## Helm Charts
+
+Add the Ceph CSI Helm Charts Repo
+
+```bash
+helm repo add ceph-csi https://ceph.github.io/csi-charts
+helm repo update
+```
+
+The file `values.yaml` does everything that all the other files to install and configure the Ceph CSI above would do.
+
+So to acomplish the same result, you can simply run the following command:
+
+```bash
+helm install --namespace "ceph-csi-rbd" --create-namespace "ceph-csi-rbd" ceph-csi/ceph-csi-rbd -f values.yaml
+```
+
+The command above will organize everything in the namespace `ceph-csi-rbd` and set the `csi-rbd-sc` as default storage class in your cluster.
+
+If you don't want the Ceph as default storage class, comment the following configuration in `values.yaml`
+
+```
+  annotations:
+    storageclass.kubernetes.io/is-default-class: "true"
+```
+
+To test you can run one of the previous tests like `kubectl apply -f pvc.yaml`, below an example:
+
+```bash
+$ kubectl apply pvc.y^C
+$ kubectl get pv
+No resources found
+$ kubectl get pvc
+No resources found in default namespace.
+$ kubectl apply -f pvc.yaml
+persistentvolumeclaim/rbd-pvc created
+$ kubectl get pv
+NAME                                       CAPACITY   ACCESS MODES   RECLAIM POLICY   STATUS   CLAIM             STORAGECLASS   REASON   AGE
+pvc-c4e16a77-3801-4861-aee1-d93bac9ca393   1Gi        RWO            Delete           Bound    default/rbd-pvc   csi-rbd-sc              2s
+$ kubectl get pvc
+NAME      STATUS   VOLUME                                     CAPACITY   ACCESS MODES   STORAGECLASS   AGE
+rbd-pvc   Bound    pvc-c4e16a77-3801-4861-aee1-d93bac9ca393   1Gi        RWO            csi-rbd-sc     5s
+$ kubectl delete -f pvc.yaml
+persistentvolumeclaim "rbd-pvc" deleted
+```
+
 ## References:
 
 https://docs.ceph.com/en/reef/cephadm/install/
 https://docs.ceph.com/en/reef/cephadm/host-management/#cephadm-adding-hosts
 https://docs.ceph.com/en/reef/cephadm/services/osd/#cephadm-deploy-osds
 https://docs.ceph.com/en/reef/rbd/rbd-kubernetes/
+https://github.com/ceph/ceph-csi/tree/devel/charts/ceph-csi-rbd
+https://github.com/ceph/ceph-csi/tree/devel/charts/ceph-csi-cephfs
 
 ## TODO
 
-- [ ] Make all the Kubernetes part of this via Helm Charts for the sake of our menthal health.
+- [x] Make all the Kubernetes part of this via Helm Charts for the sake of our menthal health.
