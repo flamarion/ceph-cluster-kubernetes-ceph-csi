@@ -4,7 +4,7 @@ apiVersion: apps/v1
 metadata:
   name: csi-rbdplugin
   # replace with non-default namespace name
-  namespace: default
+  namespace: ceph-csi-rbd
 spec:
   selector:
     matchLabels:
@@ -200,9 +200,7 @@ spec:
           configMap:
             name: ceph-csi-encryption-kms-config
         - name: keys-tmp-dir
-          emptyDir: {
-            medium: "Memory"
-          }
+          emptyDir: { medium: "Memory" }
         - name: oidc-token
           projected:
             sources:
@@ -217,7 +215,7 @@ kind: Service
 metadata:
   name: csi-metrics-rbdplugin
   # replace with non-default namespace name
-  namespace: default
+  namespace: ceph-csi-rbd
   labels:
     app: csi-metrics
 spec:

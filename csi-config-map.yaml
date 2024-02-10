@@ -5,13 +5,14 @@ data:
   config.json: |-
     [
       {
-        "clusterID": "233a71ec-7b10-11ee-a5c8-f76cb62122db",
+        "clusterID": "b982507a-c8b6-4cf4-aed8-b49a9bf6ac1e",
         "monitors": [
-          "192.168.10.56:6789",
-          "192.168.10.58:6789",
-          "192.168.10.59:6789"
+          "192.168.10.10:6789",
+          "192.168.10.11:6789",
+          "192.168.10.12:6789"
         ]
       }
     ]
 metadata:
   name: ceph-csi-config
+  namespace: ceph-csi-rbd

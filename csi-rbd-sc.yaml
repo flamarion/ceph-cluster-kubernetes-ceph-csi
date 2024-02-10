@@ -3,17 +3,19 @@ apiVersion: storage.k8s.io/v1
 kind: StorageClass
 metadata:
    name: csi-rbd-sc
+   annotations:
+      storageclass.kubernetes.io/is-default-class: "true"
 provisioner: rbd.csi.ceph.com
 parameters:
-   clusterID: 233a71ec-7b10-11ee-a5c8-f76cb62122db
+   clusterID: b982507a-c8b6-4cf4-aed8-b49a9bf6ac1e
    pool: kubernetes
    imageFeatures: layering
    csi.storage.k8s.io/provisioner-secret-name: csi-rbd-secret
-   csi.storage.k8s.io/provisioner-secret-namespace: default
+   csi.storage.k8s.io/provisioner-secret-namespace: ceph-csi-rbd
    csi.storage.k8s.io/controller-expand-secret-name: csi-rbd-secret
-   csi.storage.k8s.io/controller-expand-secret-namespace: default
+   csi.storage.k8s.io/controller-expand-secret-namespace: ceph-csi-rbd
    csi.storage.k8s.io/node-stage-secret-name: csi-rbd-secret
-   csi.storage.k8s.io/node-stage-secret-namespace: default
+   csi.storage.k8s.io/node-stage-secret-namespace: ceph-csi-rbd
 reclaimPolicy: Delete
 allowVolumeExpansion: true
 mountOptions:
